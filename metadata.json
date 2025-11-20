@@ -1,0 +1,5 @@
+{
+  "name": "CodeWise AI Reviewer",
+  "description": "An intelligent code analysis tool. Paste your code or upload files to receive instant, professional-grade feedback, refactoring suggestions, and security audits.",
+  "requestFramePermissions": []
+}
