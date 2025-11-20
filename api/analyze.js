@@ -2,12 +2,19 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 // FORCE LOAD: Explicitly point to .env.local in the project root
-// This bypasses Vercel CLI issues on Windows
 const envPath = path.resolve(process.cwd(), '.env.local');
 dotenv.config({ path: envPath });
 
 export default async function handler(req, res) {
-  // 1. Method & Key Security Check
+  // 1. Debug Logs (Only visible in Local Development)
+  if (process.env.NODE_ENV !== 'production') {
+    console.log("---------------------------------------------------");
+    console.log("1. API Route Hit");
+    console.log("2. Key Status:", process.env.OPENAI_API_KEY ? "FOUND ✅" : "MISSING ❌");
+    console.log("---------------------------------------------------");
+  }
+
+  // 2. Method Check
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -22,7 +29,14 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "No code provided" });
   }
 
-  // 2. System Prompt (Enforcing JSON Schema)
+  // 3. Validation: Enforce 60k Character Limit
+  if (code.length > 60000) {
+    return res.status(400).json({ 
+      error: `Code is too long (${code.length} chars). Max limit is 60,000 characters.` 
+    });
+  }
+
+  // 4. System Prompt (Strict JSON Schema)
   const systemPrompt = `
     You are CodeWise, an expert Senior Software Engineer.
     You MUST output a valid, raw JSON object strictly following this schema:
@@ -38,7 +52,7 @@ export default async function handler(req, res) {
   `;
 
   try {
-    // 3. Call OpenAI API (gpt-4o-mini)
+    // 5. Call OpenAI API (gpt-4o-mini)
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -49,7 +63,8 @@ export default async function handler(req, res) {
         model: "gpt-4o-mini", 
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: `Analyze this code:\n\n${code.slice(0, 25000)}` }
+          // "Sanitization": Wrap user code in tags so the AI knows it's data, not instructions
+          { role: "user", content: `Analyze the following code snippet:\n\n<code_snippet>\n${code}\n</code_snippet>` }
         ],
         response_format: { type: "json_object" }, 
         temperature: 0.2
@@ -64,7 +79,6 @@ export default async function handler(req, res) {
     const data = await response.json();
     const content = data.choices[0].message.content;
 
-    // 4. Return clean JSON
     return res.status(200).json(JSON.parse(content));
 
   } catch (error) {
