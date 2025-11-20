@@ -6,13 +6,6 @@ const envPath = path.resolve(process.cwd(), '.env.local');
 dotenv.config({ path: envPath });
 
 export default async function handler(req, res) {
-  // 1. Debug Logs (Only visible in Local Development)
-  if (process.env.NODE_ENV !== 'production') {
-    console.log("---------------------------------------------------");
-    console.log("1. API Route Hit");
-    console.log("2. Key Status:", process.env.OPENAI_API_KEY ? "FOUND ✅" : "MISSING ❌");
-    console.log("---------------------------------------------------");
-  }
 
   // 2. Method Check
   if (req.method !== 'POST') {
@@ -60,7 +53,7 @@ export default async function handler(req, res) {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini", 
+        model: process.env.OPENAI_MODEL || "gpt-4o-mini", 
         messages: [
           { role: "system", content: systemPrompt },
           // "Sanitization": Wrap user code in tags so the AI knows it's data, not instructions
