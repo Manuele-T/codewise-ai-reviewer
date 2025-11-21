@@ -1,36 +1,45 @@
 import React from 'react';
-import { AnalysisResponse } from '../App';
-import { ShieldAlert, TrendingUp, Lightbulb, CheckCircle, Copy } from 'lucide-react';
+import { AnalysisResponse } from '../types';
+import { ShieldAlert, TrendingUp, Lightbulb, CheckCircle2, Copy, Cpu } from 'lucide-react';
 
 interface AnalysisResultProps {
   data: AnalysisResponse;
 }
 
-const Section: React.FC<{ title: string; icon: React.ReactNode; children: React.ReactNode; className?: string }> = ({ title, icon, children, className = "" }) => (
-  <div className={`rounded-xl border border-slate-800 bg-slate-900/40 overflow-hidden ${className}`}>
-    <div className="px-4 py-3 bg-slate-900/60 border-b border-slate-800 flex items-center gap-2">
+// Helper Component for Cards
+const ResultCard: React.FC<{ title: string; icon: React.ReactNode; children: React.ReactNode; className?: string; delayClass?: string }> = ({ title, icon, children, className = "", delayClass="delay-0" }) => (
+  <div className={`group relative rounded-2xl border border-white/10 bg-[#121214] overflow-hidden hover:border-white/30 transition-all duration-300 shadow-lg hover:shadow-2xl animate-in fade-in slide-in-from-bottom-4 fill-mode-both ${className} ${delayClass}`}>
+    
+    {/* Subtle Highlight Gradient */}
+    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none"></div>
+
+    <div className="relative px-6 py-4 border-b border-white/10 flex items-center gap-3 bg-white/[0.02]">
       {icon}
-      <h3 className="font-semibold text-slate-200 text-sm tracking-wide uppercase">{title}</h3>
+      <h3 className="font-mono text-zinc-100 text-xs uppercase tracking-widest font-bold">{title}</h3>
     </div>
-    <div className="p-5">
+    <div className="relative p-6">
       {children}
     </div>
   </div>
 );
 
-const ListItems: React.FC<{ items: string[]; icon?: React.ReactNode; type?: 'success' | 'warning' | 'danger' | 'info' }> = ({ items, type = 'info' }) => {
-  if (!items || items.length === 0) return <p className="text-slate-500 italic">None detected.</p>;
+// Helper Component for Lists
+const ListItems: React.FC<{ items: string[]; type?: 'success' | 'warning' | 'danger' | 'info' }> = ({ items, type = 'info' }) => {
+  if (!items || items.length === 0) return <p className="text-zinc-500 italic text-sm font-mono">No data detected.</p>;
+
+  const dotColors = {
+    success: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]",
+    warning: "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]",
+    danger: "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]",
+    info: "bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]"
+  };
 
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-4">
       {items.map((item, idx) => (
-        <li key={idx} className="flex items-start gap-3 text-slate-300 text-sm leading-relaxed">
-          <span className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 
-            ${type === 'success' ? 'bg-emerald-500' : 
-              type === 'warning' ? 'bg-amber-500' : 
-              type === 'danger' ? 'bg-rose-500' : 'bg-indigo-500'}`} 
-          />
-          <span>{item}</span>
+        <li key={idx} className="flex items-start gap-4 text-zinc-200 text-sm leading-relaxed group/item">
+          <span className={`mt-2 w-2 h-2 rounded-full shrink-0 ${dotColors[type]} transition-transform group-hover/item:scale-125`} />
+          <span className="font-medium opacity-90">{item}</span>
         </li>
       ))}
     </ul>
@@ -39,53 +48,64 @@ const ListItems: React.FC<{ items: string[]; icon?: React.ReactNode; type?: 'suc
 
 export const AnalysisResult: React.FC<AnalysisResultProps> = ({ data }) => {
   const copyCode = () => {
-    if (data.refactoredCode) {
-      navigator.clipboard.writeText(data.refactoredCode);
-    }
+    if (data.refactoredCode) navigator.clipboard.writeText(data.refactoredCode);
   };
 
   return (
-    <div className="space-y-6 pb-10">
-      {/* Summary */}
-      <div className="bg-gradient-to-r from-indigo-900/20 to-slate-900 border border-indigo-500/20 rounded-xl p-6">
-        <h3 className="text-indigo-400 font-semibold mb-2">Executive Summary</h3>
-        <p className="text-slate-300 leading-relaxed">{data.summary}</p>
+    <div className="space-y-8 pb-10 max-w-5xl mx-auto">
+      {/* Summary Card - The Green/Emerald Theme Update */}
+      <div className="relative rounded-2xl border border-emerald-500/50 bg-emerald-950/20 p-8 overflow-hidden animate-in fade-in zoom-in-95 duration-500 shadow-xl">
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.6)]"></div>
+        <h3 className="text-emerald-200 font-mono text-sm font-bold mb-4 uppercase tracking-wider flex items-center gap-3">
+          <Cpu className="w-5 h-5 text-emerald-300 animate-pulse" /> Executive Summary
+        </h3>
+        <p className="text-white leading-relaxed font-normal text-base drop-shadow-sm">{data.summary}</p>
       </div>
 
-      {/* Grid for Strengths & Weaknesses */}
+      {/* Grid Layout */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <Section title="Strengths" icon={<CheckCircle className="w-4 h-4 text-emerald-500" />}>
+        <ResultCard title="System Strengths" icon={<CheckCircle2 className="w-5 h-5 text-emerald-400" />} delayClass="delay-100">
           <ListItems items={data.strengths} type="success" />
-        </Section>
+        </ResultCard>
 
-        <Section title="Areas for Improvement" icon={<TrendingUp className="w-4 h-4 text-amber-500" />}>
+        <ResultCard title="Optimization Targets" icon={<TrendingUp className="w-5 h-5 text-amber-400" />} delayClass="delay-200">
            <ListItems items={data.weaknesses} type="warning" />
-        </Section>
+        </ResultCard>
       </div>
 
-      {/* Security */}
-      <Section title="Security Audit" icon={<ShieldAlert className="w-4 h-4 text-rose-500" />} className="border-rose-900/30 bg-rose-950/10">
+      {/* Security Audit */}
+      <ResultCard 
+        title="Security Audit" 
+        icon={<ShieldAlert className="w-5 h-5 text-rose-500" />} 
+        className="border-rose-900/50 bg-rose-950/20"
+        delayClass="delay-300"
+      >
         <ListItems items={data.securityIssues} type="danger" />
-      </Section>
+      </ResultCard>
 
-      {/* Suggested Improvements */}
-      <Section title="Actionable Advice" icon={<Lightbulb className="w-4 h-4 text-yellow-400" />}>
+      {/* Improvements */}
+      <ResultCard title="Recommended Actions" icon={<Lightbulb className="w-5 h-5 text-blue-400" />} delayClass="delay-400">
         <ListItems items={data.improvements} type="info" />
-      </Section>
+      </ResultCard>
 
-      {/* Refactored Code Block */}
+      {/* Refactored Code */}
       {data.refactoredCode && (
-        <div className="rounded-xl border border-slate-800 overflow-hidden bg-[#0d1117]">
-          <div className="px-4 py-2 bg-slate-900 border-b border-slate-800 flex justify-between items-center">
-            <span className="text-xs font-mono text-slate-500">Refactored Snippet</span>
+        <div className="rounded-2xl border border-white/10 overflow-hidden bg-[#0a0a0c] animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500 shadow-2xl">
+          <div className="px-6 py-4 bg-zinc-900 border-b border-white/5 flex justify-between items-center">
+            <span className="text-xs font-mono text-zinc-400 flex items-center gap-2 font-bold uppercase">
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50"></div>
+              REFACTORED_OUTPUT.tsx
+            </span>
             <button 
               onClick={copyCode}
-              className="text-xs flex items-center gap-1 text-slate-400 hover:text-white transition-colors"
+              className="text-xs flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-white/10 px-3 py-1.5 rounded-md transition-all uppercase font-mono tracking-wider font-bold border border-transparent hover:border-white/20"
+              aria-label="Copy Code"
+              title="Copy Code"
             >
-              <Copy className="w-3 h-3" /> Copy
+              <Copy className="w-3.5 h-3.5" /> Copy Code
             </button>
           </div>
-          <pre className="p-4 overflow-x-auto text-sm text-slate-300 font-mono leading-loose">
+          <pre className="p-8 overflow-x-auto text-sm text-zinc-200 font-mono leading-loose">
             <code>{data.refactoredCode}</code>
           </pre>
         </div>

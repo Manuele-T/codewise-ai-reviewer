@@ -1,8 +1,7 @@
-import { AnalysisResponse } from "../App";
+import { AnalysisResponse } from "../types";
 
 export const analyzeCode = async (codeSnippet: string): Promise<AnalysisResponse> => {
   try {
-    // Call our own secure backend (no API key needed here)
     const response = await fetch("/api/analyze", {
       method: "POST",
       headers: {

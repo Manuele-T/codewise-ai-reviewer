@@ -3,23 +3,29 @@ import { BrainCircuit, Github } from 'lucide-react';
 
 export const Header: React.FC = () => {
   return (
-    <header className="h-16 border-b border-slate-800 bg-slate-950 flex items-center justify-between px-6 shrink-0 z-10">
+    <header className="h-16 border-b border-white/10 bg-[#09090b]/90 backdrop-blur-md flex items-center justify-between px-6 shrink-0 z-20 relative shadow-lg">
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
-          <BrainCircuit className="w-6 h-6 text-indigo-400" />
+        <div className="relative group">
+          {/* Green/Teal Glow Effect */}
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg blur opacity-40 group-hover:opacity-75 transition duration-500"></div>
+          <div className="relative p-2 bg-zinc-900 rounded-lg border border-white/20 shadow-inner">
+            <BrainCircuit className="w-5 h-5 text-emerald-300" />
+          </div>
         </div>
         <div>
-          <h1 className="text-lg font-bold text-white tracking-tight">CodeWise</h1>
-          <p className="text-xs text-slate-400 font-medium">AI-Powered Code Reviewer</p>
+          <h1 className="text-xl font-bold text-white tracking-tight font-mono drop-shadow-sm">
+            CodeWise_
+          </h1>
         </div>
       </div>
       
-      <div className="flex items-center gap-4 text-sm text-slate-400">
-        <div className="hidden md:flex items-center gap-6 mr-4">
-           <span className="hover:text-indigo-400 cursor-pointer transition-colors">Documentation</span>
-           <span className="hover:text-indigo-400 cursor-pointer transition-colors">Privacy</span>
-        </div>
-        <a href="#" className="text-slate-500 hover:text-white transition-colors">
+      <div className="flex items-center gap-6 text-sm font-mono text-zinc-400">
+        <a 
+          href="#" 
+          className="text-zinc-300 hover:text-white transition-colors hover:bg-white/10 p-2 rounded-full border border-transparent hover:border-white/20"
+          aria-label="View Source on GitHub"
+          title="View Source on GitHub"
+        >
           <Github className="w-5 h-5" />
         </a>
       </div>
