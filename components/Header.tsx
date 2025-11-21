@@ -21,7 +21,9 @@ export const Header: React.FC = () => {
       
       <div className="flex items-center gap-6 text-sm font-mono text-zinc-400">
         <a 
-          href="#" 
+          href="https://github.com/Manuele-T/codewise-ai-reviewer" 
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-zinc-300 hover:text-white transition-colors hover:bg-white/10 p-2 rounded-full border border-transparent hover:border-white/20"
           aria-label="View Source on GitHub"
           title="View Source on GitHub"
