@@ -8,14 +8,14 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #09090b; 
+  background: #050505; 
 }
 ::-webkit-scrollbar-thumb {
   background: #27272a; 
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46; 
+  background: #10b981; 
 }
 
 /* Custom Animations */
@@ -28,7 +28,7 @@
   animation: scan 2s linear infinite;
 }
 
-/* Utility classes for fade/slide animations if plugins aren't present */
+/* Utility classes for fade/slide animations */
 .animate-in {
   animation-duration: 0.5s;
   animation-fill-mode: both;

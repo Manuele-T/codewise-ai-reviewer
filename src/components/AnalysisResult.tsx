@@ -1,6 +1,6 @@
 import React from 'react';
 import { AnalysisResponse } from '../types';
-import { ShieldAlert, TrendingUp, Lightbulb, CheckCircle2, Copy, Cpu } from 'lucide-react';
+import { ShieldAlert, TrendingUp, Lightbulb, CheckCircle2, Cpu } from 'lucide-react';
 
 interface AnalysisResultProps {
   data: AnalysisResponse;
@@ -47,13 +47,9 @@ const ListItems: React.FC<{ items: string[]; type?: 'success' | 'warning' | 'dan
 };
 
 export const AnalysisResult: React.FC<AnalysisResultProps> = ({ data }) => {
-  const copyCode = () => {
-    if (data.refactoredCode) navigator.clipboard.writeText(data.refactoredCode);
-  };
-
   return (
     <div className="space-y-8 pb-10 max-w-5xl mx-auto">
-      {/* Summary Card - The Green/Emerald Theme Update */}
+      {/* Summary Card */}
       <div className="relative rounded-2xl border border-emerald-500/50 bg-emerald-950/20 p-8 overflow-hidden animate-in fade-in zoom-in-95 duration-500 shadow-xl">
         <div className="absolute top-0 left-0 w-1.5 h-full bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.6)]"></div>
         <h3 className="text-emerald-200 font-mono text-sm font-bold mb-4 uppercase tracking-wider flex items-center gap-3">
@@ -87,29 +83,6 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ data }) => {
       <ResultCard title="Recommended Actions" icon={<Lightbulb className="w-5 h-5 text-blue-400" />} delayClass="delay-400">
         <ListItems items={data.improvements} type="info" />
       </ResultCard>
-
-      {/* Refactored Code */}
-      {data.refactoredCode && (
-        <div className="rounded-2xl border border-white/10 overflow-hidden bg-[#0a0a0c] animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500 shadow-2xl">
-          <div className="px-6 py-4 bg-zinc-900 border-b border-white/5 flex justify-between items-center">
-            <span className="text-xs font-mono text-zinc-400 flex items-center gap-2 font-bold uppercase">
-              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50"></div>
-              REFACTORED_OUTPUT.tsx
-            </span>
-            <button 
-              onClick={copyCode}
-              className="text-xs flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-white/10 px-3 py-1.5 rounded-md transition-all uppercase font-mono tracking-wider font-bold border border-transparent hover:border-white/20"
-              aria-label="Copy Code"
-              title="Copy Code"
-            >
-              <Copy className="w-3.5 h-3.5" /> Copy Code
-            </button>
-          </div>
-          <pre className="p-8 overflow-x-auto text-sm text-zinc-200 font-mono leading-loose">
-            <code>{data.refactoredCode}</code>
-          </pre>
-        </div>
-      )}
     </div>
   );
 };

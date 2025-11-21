@@ -4,5 +4,4 @@ export interface AnalysisResponse {
   weaknesses: string[];
   improvements: string[];
   securityIssues: string[];
-  refactoredCode?: string;
 }
