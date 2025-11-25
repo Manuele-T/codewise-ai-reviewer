@@ -1,8 +1,3 @@
-Here is the updated `README.md` code.
-
-I have removed the "Automatic Refactoring" feature and updated the "How It Works" section to accurately reflect that the tool now acts purely as a Security & Quality Auditor.
-
-````markdown
 # CodeWise - AI Code Reviewer
 
 CodeWise is a secure, AI-powered code review assistant designed to act as a senior software engineer on demand. Built with React, Vite, and Vercel Serverless Functions, this tool provides instant, structured analysis focusing on readability, performance, security, and best practices.
@@ -107,9 +102,6 @@ Open your browser and navigate to the local URL provided by Vercel (usually `htt
 
 ## Project Structure
 
-```text
-# Project Structure
-
 ```
 ├── api
 │   └── analyze.js
@@ -135,7 +127,3 @@ Open your browser and navigate to the local URL provided by Vercel (usually `htt
 ├── README.md
 ├── tsconfig.json
 └── vite.config.ts
-```
-
-```
-```
