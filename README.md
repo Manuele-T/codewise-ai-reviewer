@@ -69,7 +69,7 @@ Follow these steps to set up the secure development environment.
 **1. Clone the repository**
 
 ```bash
-git clone [https://github.com/Manuele-T/codewise-ai-reviewer](https://github.com/Manuele-T/codewise-ai-reviewer)
+git clone https://github.com/Manuele-T/codewise-ai-reviewer
 cd codewise-ai-reviewer
 ````
 
